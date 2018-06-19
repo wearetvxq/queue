@@ -1,0 +1,295 @@
+---
+swagger: "2.0"
+info:
+  description: "开关站-消息队列swagger"
+  version: "1"
+  title: "消息队列"
+host: "mail.itlaolang"
+basePath: "/v1"
+schemes:
+- "http"
+consumes:
+- "application/json"
+produces:
+- "application/json"
+paths:
+  /post_data:
+    post:
+      tags:
+      - "postdata"
+      summary: "post data"
+      description: "传输数据/写入消息队列"
+      operationId: "post_data"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "data"
+        description: "传输的数据和参数集合"
+        required: true
+        schema:
+          $ref: "#/definitions/data"
+      responses:
+        200:
+          description: "return status"
+          schema:
+            $ref: "#/definitions/inline_response_200_1"
+        500:
+          description: "return status"
+          schema:
+            $ref: "#/definitions/inline_response_500"
+      x-swagger-router-controller: "swagger_server.controllers.postdata_controller"
+  /scan:
+    get:
+      tags:
+      - "public"
+      summary: "scan"
+      description: "查看当前队列信息"
+      operationId: "scan"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        200:
+          description: "return status"
+          schema:
+            $ref: "#/definitions/inline_response_200_1_1"
+        500:
+          description: "return status"
+          schema:
+            $ref: "#/definitions/inline_response_500"
+      x-swagger-router-controller: "swagger_server.controllers.public_controller"
+  /get_data:
+    post:
+      tags:
+      - "getdata"
+      summary: "get data"
+      description: "取指定消息队列单条数据"
+      operationId: "get_data"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "data"
+        description: "消息队列名称"
+        required: true
+        schema:
+          $ref: "#/definitions/data1"
+      responses:
+        200:
+          description: "return status"
+          schema:
+            $ref: "#/definitions/inline_response_200_1_2"
+        500:
+          description: "return status"
+          schema:
+            $ref: "#/definitions/inline_response_500"
+      x-swagger-router-controller: "swagger_server.controllers.getdata_controller"
+  /get_data_all:
+    post:
+      tags:
+      - "getdata"
+      summary: "get data all"
+      description: "取指定消息队列所有数据"
+      operationId: "get_data_all"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "data"
+        description: "消息队列名称"
+        required: true
+        schema:
+          $ref: "#/definitions/data1"
+      responses:
+        200:
+          description: "return status"
+          schema:
+            $ref: "#/definitions/inline_response_200_1_2"
+        500:
+          description: "return status"
+          schema:
+            $ref: "#/definitions/inline_response_500"
+      x-swagger-router-controller: "swagger_server.controllers.getdata_controller"
+  /delete_queue:
+    post:
+      tags:
+      - "public"
+      summary: "delete queue"
+      description: "删除指定队列"
+      operationId: "delete_queue"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "data"
+        description: "消息队列名称"
+        required: true
+        schema:
+          $ref: "#/definitions/data1"
+      responses:
+        200:
+          description: "return status"
+          schema:
+            $ref: "#/definitions/inline_response_200_1"
+        500:
+          description: "return status"
+          schema:
+            $ref: "#/definitions/inline_response_500"
+      x-swagger-router-controller: "swagger_server.controllers.public_controller"
+definitions:
+  inline_response_200_1:
+    properties:
+      code:
+        type: "string"
+        description: "status_code"
+      msg:
+        type: "string"
+        description: "the msg of return"
+      use_time:
+        type: "integer"
+        description: "the cost of time"
+    example:
+      code: 0
+      msg: "success"
+      use_time: 5.02151999999999976154185787891037762165069580078125
+  inline_response_200_1_1:
+    properties:
+      code:
+        type: "string"
+        description: "status_code"
+      msg:
+        type: "string"
+        description: "the msg of return"
+      use_time:
+        type: "integer"
+        description: "the cost of time"
+      data:
+        type: "array"
+        description: "information of queue"
+        items:
+          $ref: "#/definitions/inline_response_200_2"
+    example:
+      code: 0
+      msg: "success"
+      use_time: 5.02151999999999976154185787891037762165069580078125
+      data:
+      - name: "test1"
+        lnegth: "100"
+      - name: "test2"
+        lnegth: "200"
+      - name: "test3"
+        lnegth: "300"
+  inline_response_200_1_2:
+    properties:
+      code:
+        type: "string"
+        description: "status_code"
+      msg:
+        type: "string"
+        description: "the msg of return"
+      use_time:
+        type: "integer"
+        description: "the cost of time"
+      data:
+        type: "array"
+        description: "the list of data"
+        items:
+          $ref: "#/definitions/inline_response_200_2_1"
+    example:
+      use_time: "use_time"
+      msg: "msg"
+      data:
+      - switchtype: "switchtype"
+        line: "line"
+        station: "station"
+        eletype: "eletype"
+        swtichstatus: "swtichstatus"
+      - switchtype: "switchtype"
+        line: "line"
+        station: "station"
+        eletype: "eletype"
+        swtichstatus: "swtichstatus"
+      code: "code"
+  inline_response_200_2:
+    properties:
+      name:
+        type: "string"
+        description: "the name of queue"
+      length:
+        type: "string"
+        description: "the length of queue"
+    example:
+      name: "test1"
+      length: "100"
+  inline_response_200_2_1:
+    properties:
+      switchtype:
+        type: "string"
+        description: "the tyoe of switch"
+      line:
+        type: "string"
+        description: "the name of line"
+      station:
+        type: "string"
+        description: "the information of station"
+      eletype:
+        type: "string"
+        description: "the information of station"
+      swtichstatus:
+        type: "string"
+        description: "the status of station"
+    example:
+    - switchtype: "switchtype"
+      line: "line"
+      station: "station"
+      eletype: "eletype"
+      swtichstatus: "swtichstatus"
+    - switchtype: "switchtype"
+      line: "line"
+      station: "station"
+      eletype: "eletype"
+  data:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "消息队列名称"
+      priority:
+        type: "string"
+        description: "优先级"
+      lsits:
+        type: "array"
+        items:
+          $ref: "#/definitions/lsits_param"
+  data1:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "消息队列名称"
+  lsits_param:
+    properties:
+      switchtype:
+        type: "string"
+        description: "the tyoe of switch"
+      line:
+        type: "string"
+        description: "the name of line"
+      station:
+        type: "string"
+        description: "the information of station"
+      eletype:
+        type: "string"
+        description: "the information of station"
+      swtichstatus:
+        type: "string"
+        description: "the status of station"
+  inline_response_500:
+    properties:
+      code:
+        type: "string"
+        description: "status_code"
+      msg:
+        type: "string"
+        description: "the msg of return"
